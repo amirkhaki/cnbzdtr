@@ -5,6 +5,10 @@ import (
 	"fmt"
 )
 
+type Handler interface {
+	Handle(u *User) error
+}
+
 type errorList []error
 
 func (eL errorList) Error() string {
@@ -15,22 +19,23 @@ func (eL errorList) Error() string {
 	return sb.String()
 }
 
+
 type User struct {
 	ID                   string
 	Score                uint64
 	MostScore            uint64
 	PrevMostScore        uint64
-	mostScoreChangeFuncs []func(u *User) error
+	mostScoreChangeHandlers []Handler
 }
 
-func (u *User) OnMostScoreChange(f func(u *User) error) {
-	u.mostScoreChangeFuncs = append(u.mostScoreChangeFuncs, f)
+func (u *User) OnMostScoreChange(h Handler) {
+	u.mostScoreChangeHandlers = append(u.mostScoreChangeHandlers, h)
 }
 
 func (u *User) mostScoreChanged() error {
 	var eL errorList
-	for i, f := range u.mostScoreChangeFuncs {
-		if err := f(u); err != nil {
+	for i, h := range u.mostScoreChangeHandlers {
+		if err := h.Handle(u); err != nil {
 			eL = append(eL, fmt.Errorf("Error on func %d: %w", i+1, err))
 		}
 	}
