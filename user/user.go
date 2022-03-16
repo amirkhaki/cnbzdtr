@@ -5,6 +5,7 @@ import (
 )
 
 type User struct {
+	ID                   string
 	Score                uint64
 	MostScore            uint64
 	PrevMostScore        uint64
