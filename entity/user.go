@@ -4,6 +4,16 @@ import (
 	"strings"
 )
 
+type errorList []error
+
+func (eL errorList) Error() string {
+	var sb strings.Builder
+	for i := range eL {
+		sb.WriteString(eL[i].Error())
+	}
+	return sb.String()
+}
+
 type User struct {
 	ID                   string
 	Score                uint64
@@ -16,15 +26,6 @@ func (u *User) OnMostScoreChange(f func(u *User) error) {
 	u.mostScoreChangeFuncs = append(u.mostScoreChangeFuncs, f)
 }
 
-type errorList []error
-
-func (eL errorList) Error() string {
-	var sb strings.Builder
-	for i := range eL {
-		sb.WriteString(eL[i].Error())
-	}
-	return sb.String()
-}
 func (u *User) mostScoreChanged() error {
 	var eL errorList
 	for i, f := range u.mostScoreChangeFuncs {
@@ -33,4 +34,25 @@ func (u *User) mostScoreChanged() error {
 		}
 	}
 	return eL
+}
+
+func (u *User) IncreaseScore(s uint64) error {
+	u.Score += s
+	if u.Score > u.MostScore {
+		u.PrevMostScore = u.MostScore
+		u.MostScore = u.Score
+		if err := u.mostScoreChanged(); err != nil {
+			return fmt.Errorf("Error increasing user %s score: %w", u.ID, err)
+		}
+	}
+	return nil
+}
+
+func (u *User) DecreaseScore(s uint64) {
+	if u.Score <= s {
+		u.Score = 0
+		return
+	}
+	u.Score -= s
+	return
 }
