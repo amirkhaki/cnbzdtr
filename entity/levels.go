@@ -33,10 +33,8 @@ func (l *Levels) Level(s uint64) Level {
 	l.Sort()
 	for i := range l.list {
 		if i+1 == len(l.list) {
-			if s >= l.list[i] {
+			if s >= l.list[i].From {
 				return l.list[i]
-			} else {
-				return l.list[i-1]
 			}
 		}
 		if s >= l.list[i].From && s < l.list[i+1].From {

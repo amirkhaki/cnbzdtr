@@ -2,6 +2,7 @@ package entity
 
 import (
 	"strings"
+	"fmt"
 )
 
 type errorList []error

@@ -4,6 +4,7 @@ package store
 
 import (
 	"github.com/amirkhaki/cnbzdtr/protocol"
+	"github.com/amirkhaki/cnbzdtr/entity"
 
 	"fmt"
 )

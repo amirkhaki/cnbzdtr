@@ -2,17 +2,20 @@ package main
 
 import (
 	"github.com/amirkhaki/cnbzdtr/config"
+	"github.com/amirkhaki/cnbzdtr/store"
+	"github.com/amirkhaki/cnbzdtr/entity"
 
 	"log"
+	"fmt"
 	"os"
 	"os/signal"
-	"strconv"
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
 )
 
-var counter int
+
+var imS = store.New()
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
@@ -21,8 +24,22 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
-	counter += 1
-	_, err := s.ChannelMessageSend(m.ChannelID, "message"+strconv.Itoa(counter))
+	user, err := imS.GetUserByID(m.Author.ID)
+	if err != nil {
+		user = &entity.User{ID:m.Author.ID}
+		err = imS.AddUser(user)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}
+	user.IncreaseScore(200)
+	err = imS.UpdateUser(user)
+	if err != nil {
+		log.Println(err)
+	}
+	message := fmt.Sprintf("user %s\n score: %d", user.ID, user.Score)
+	_, err = s.ChannelMessageSend(m.ChannelID, message)
 	if err != nil {
 		log.Println(err)
 	}
