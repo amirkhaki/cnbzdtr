@@ -6,7 +6,7 @@ import (
 
 type Level struct {
 	Title string
-	From uint64
+	From  uint64
 }
 
 type Levels struct {
@@ -28,10 +28,10 @@ func (l *Levels) Sort() {
 // find what level score is in
 func (l *Levels) Level(s uint64) Level {
 	if len(l.list) == 0 {
-		return Level{Title:"No level exists!"}
+		return Level{Title: "No level exists!"}
 	}
 	l.Sort()
-	for i := range(l.list) {
+	for i := range l.list {
 		if i+1 == len(l.list) {
 			if s >= l.list[i] {
 				return l.list[i]
@@ -40,7 +40,7 @@ func (l *Levels) Level(s uint64) Level {
 			}
 		}
 		if s >= l.list[i].From && s < l.list[i+1].From {
-			return l.list[i] 
+			return l.list[i]
 		}
 	}
 	return l.list[0]

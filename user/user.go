@@ -5,16 +5,18 @@ import (
 )
 
 type User struct {
-	Score uint64
-	MostScore uint64
-	PrevMostScore uint64
-	mostScoreChangeFuncs []func(u *User)error
+	Score                uint64
+	MostScore            uint64
+	PrevMostScore        uint64
+	mostScoreChangeFuncs []func(u *User) error
 }
 
-func (u *User) OnMostScoreChange(f func(u *User)error) {
+func (u *User) OnMostScoreChange(f func(u *User) error) {
 	u.mostScoreChangeFuncs = append(u.mostScoreChangeFuncs, f)
 }
+
 type errorList []error
+
 func (eL errorList) Error() string {
 	var sb strings.Builder
 	for i := range eL {
