@@ -39,6 +39,9 @@ func (u *User) mostScoreChanged() error {
 			eL = append(eL, fmt.Errorf("Error on func %d: %w", i+1, err))
 		}
 	}
+	if len(eL) == 0 {
+		return nil
+	}
 	return eL
 }
 

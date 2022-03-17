@@ -16,7 +16,26 @@ import (
 
 
 var imS = store.New()
-
+func inviteCreate(s *discordgo.Session, i *discordgo.InviteCreate) {
+	user, err := imS.GetUserByID(i.Inviter.ID)
+	if err != nil {
+		user = &entity.User{ID:i.Inviter.ID}
+		err = imS.AddUser(user)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}
+	err = user.IncreaseScore(2000)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	err = imS.UpdateUser(user)
+	if err != nil {
+		log.Println(err)
+	}
+}
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Ignore all messages created by the bot itself
@@ -33,7 +52,11 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			return
 		}
 	}
-	user.IncreaseScore(200)
+	err = user.IncreaseScore(200)
+	if err != nil {
+		log.Println(err)
+		return
+	}
 	err = imS.UpdateUser(user)
 	if err != nil {
 		log.Println(err)
@@ -55,7 +78,8 @@ func main() {
 		log.Fatal(err)
 	}
 	dg.AddHandler(messageCreate)
-	dg.Identify.Intents = discordgo.IntentsGuildMessages
+	dg.AddHandler(inviteCreate)
+	dg.Identify.Intents = discordgo.IntentsGuildMessages | discordgo.IntentGuildInvites
 	err = dg.Open()
 	if err != nil {
 		log.Fatal(err)
