@@ -29,6 +29,21 @@ func (in *inmemoryStore) GetUserByID(id string) (*entity.User, error) {
 }
 
 
+func (in *inmemoryStore) GetUserOrCreate(id string) (*entity.User, error) {
+	if u, err := in.GetUserByID(id); err == nil {
+		return u, nil
+	}
+	u, err := entity.NewUser(id)
+	if err != nil {
+		return nil, fmt.Errorf("Could not create user: %w", err)
+	}
+	err = in.AddUser(u)
+	if err != nil {
+		return nil, fmt.Errorf("Could not add user: %w", err)
+	}
+	return u, nil
+}
+
 func (in *inmemoryStore) UpdateUser(u *entity.User) error {
 	if u.ID == "" {
 		return fmt.Errorf("User ID is empty!")

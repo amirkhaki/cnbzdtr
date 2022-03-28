@@ -10,6 +10,7 @@ type Store interface {
 type UserCRUD interface {
 	AddUser(u *entity.User) error
 	GetUserByID(id string) (*entity.User, error)
+	GetUserOrCreate(id string) (*entity.User, error)
 	UpdateUser(u *entity.User) error
 	DeleteUser(u *entity.User) error
 }

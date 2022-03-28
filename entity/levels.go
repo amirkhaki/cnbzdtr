@@ -43,3 +43,8 @@ func (l *Levels) Level(s uint64) Level {
 	}
 	return l.list[0]
 }
+
+func NewLevels() *Levels {
+	lvls := Levels{}
+	return &lvls
+}

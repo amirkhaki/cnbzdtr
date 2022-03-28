@@ -25,18 +25,18 @@ type User struct {
 	Score                uint64
 	MostScore            uint64
 	PrevMostScore        uint64
-	mostScoreChangeHandlers []Handler
+	mostScoreChangeHandlers map[string]Handler
 }
 
-func (u *User) OnMostScoreChange(h Handler) {
-	u.mostScoreChangeHandlers = append(u.mostScoreChangeHandlers, h)
+func (u *User) OnMostScoreChange(title string, h Handler) {
+	u.mostScoreChangeHandlers[title] = h
 }
 
 func (u *User) mostScoreChanged() error {
 	var eL errorList
 	for i, h := range u.mostScoreChangeHandlers {
 		if err := h.Handle(u); err != nil {
-			eL = append(eL, fmt.Errorf("Error on func %d: %w", i+1, err))
+			eL = append(eL, fmt.Errorf("Error on func %s: %w", i, err))
 		}
 	}
 	if len(eL) == 0 {
@@ -64,4 +64,11 @@ func (u *User) DecreaseScore(s uint64) {
 	}
 	u.Score -= s
 	return
+}
+
+
+func NewUser(id string) (*User, error) {
+	u := User{ID:id}
+	u.mostScoreChangeHandlers = make(map[string]Handler)
+	return &u, nil
 }

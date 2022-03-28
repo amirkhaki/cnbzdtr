@@ -4,9 +4,9 @@ import (
 	"github.com/amirkhaki/cnbzdtr/config"
 	"github.com/amirkhaki/cnbzdtr/store"
 	"github.com/amirkhaki/cnbzdtr/entity"
+	"github.com/amirkhaki/cnbzdtr/handler"
 
 	"log"
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -15,57 +15,21 @@ import (
 )
 
 
-var imS = store.New()
+var h *handler.Handler
+
+func init() {
+	imS := store.New()
+	lvls := entity.NewLevels()
+	lvls.AddLevel(entity.Level{From:300, Title:"First Level"})
+	lvls.AddLevel(entity.Level{From:600, Title: "Second Level"})
+	lvls.AddLevel(entity.Level{From:2600,Title: "Third Level"})
+	h = handler.New(lvls, imS)
+}
 func inviteCreate(s *discordgo.Session, i *discordgo.InviteCreate) {
-	user, err := imS.GetUserByID(i.Inviter.ID)
-	if err != nil {
-		user = &entity.User{ID:i.Inviter.ID}
-		err = imS.AddUser(user)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-	}
-	err = user.IncreaseScore(2000)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	err = imS.UpdateUser(user)
-	if err != nil {
-		log.Println(err)
-	}
+	h.InviteCreate(s,i)
 }
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-
-	// Ignore all messages created by the bot itself
-	// This isn't required in this specific example but it's a good practice.
-	if m.Author.ID == s.State.User.ID {
-		return
-	}
-	user, err := imS.GetUserByID(m.Author.ID)
-	if err != nil {
-		user = &entity.User{ID:m.Author.ID}
-		err = imS.AddUser(user)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-	}
-	err = user.IncreaseScore(200)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	err = imS.UpdateUser(user)
-	if err != nil {
-		log.Println(err)
-	}
-	message := fmt.Sprintf("user %s\n score: %d", user.ID, user.Score)
-	_, err = s.ChannelMessageSend(m.ChannelID, message)
-	if err != nil {
-		log.Println(err)
-	}
+	h.MessageCreate(s,m)
 }
 
 func main() {
