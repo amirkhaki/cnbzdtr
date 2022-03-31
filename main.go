@@ -10,26 +10,35 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"context"
 
 	"github.com/bwmarrin/discordgo"
 )
 
 
 var h *handler.Handler
-
+var ctx = context.Background()
 func init() {
-	imS := store.New()
+	cfg, err := config.New()
+	if err != nil {
+		log.Fatal(err)
+	}
+	imS, err := store.New(cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
 	lvls := entity.NewLevels()
+	lvls.AddLevel(entity.Level{From:0, Title:"Zero Level"})
 	lvls.AddLevel(entity.Level{From:300, Title:"First Level"})
 	lvls.AddLevel(entity.Level{From:600, Title: "Second Level"})
 	lvls.AddLevel(entity.Level{From:2600,Title: "Third Level"})
 	h = handler.New(lvls, imS)
 }
 func inviteCreate(s *discordgo.Session, i *discordgo.InviteCreate) {
-	h.InviteCreate(s,i)
+	h.InviteCreate(ctx,s,i)
 }
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	h.MessageCreate(s,m)
+	h.MessageCreate(ctx,s,m)
 }
 
 func main() {

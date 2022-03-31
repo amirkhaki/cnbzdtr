@@ -4,16 +4,17 @@ import (
 	dg "github.com/bwmarrin/discordgo"
 	"log"
 	"fmt"
+	"context"
 )
 
-func (h *Handler) MessageCreate(s *dg.Session, m *dg.MessageCreate) {
+func (h *Handler) MessageCreate(ctx context.Context, s *dg.Session, m *dg.MessageCreate) {
 
 	// Ignore all messages created by the bot itself
 	// This isn't required in this specific example but it's a good practice.
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
-	user, err := h.store.GetUserOrCreate(m.Author.ID)
+	user, err := h.store.GetUserOrCreate(ctx, m.Author.ID)
 	if err != nil {
 		log.Println(err)
 		return
@@ -25,7 +26,7 @@ func (h *Handler) MessageCreate(s *dg.Session, m *dg.MessageCreate) {
 		log.Println(err)
 		return
 	}
-	err = h.store.UpdateUser(user)
+	err = h.store.UpdateUser(ctx, user)
 	if err != nil {
 		log.Println(err)
 	}

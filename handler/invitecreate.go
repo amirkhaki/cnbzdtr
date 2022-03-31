@@ -3,10 +3,11 @@ package handler
 import (
 	dg "github.com/bwmarrin/discordgo"
 	"log"
+	"context"
 )
 
-func (h *Handler) InviteCreate(s *dg.Session, i *dg.InviteCreate) {
-	user, err := h.store.GetUserOrCreate(i.Inviter.ID)
+func (h *Handler) InviteCreate(ctx context.Context, s *dg.Session, i *dg.InviteCreate) {
+	user, err := h.store.GetUserOrCreate(ctx, i.Inviter.ID)
 	if err != nil {
 		log.Println(err)
 		return
@@ -18,7 +19,7 @@ func (h *Handler) InviteCreate(s *dg.Session, i *dg.InviteCreate) {
 		log.Println(err)
 		return
 	}
-	err = h.store.UpdateUser(user)
+	err = h.store.UpdateUser(ctx, user)
 	if err != nil {
 		log.Println(err)
 	}

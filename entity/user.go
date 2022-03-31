@@ -21,10 +21,10 @@ func (eL errorList) Error() string {
 
 
 type User struct {
-	ID                   string
-	Score                uint64
-	MostScore            uint64
-	PrevMostScore        uint64
+	ID                   string `redis:"-"`
+	Score                uint64 `redis:"score"`
+	MostScore            uint64 `redis:"most_score"`
+	PrevMostScore        uint64 `redis:"prev_most_score"`
 	mostScoreChangeHandlers map[string]Handler
 }
 

@@ -5,14 +5,16 @@ package store
 import (
 	"github.com/amirkhaki/cnbzdtr/protocol"
 	"github.com/amirkhaki/cnbzdtr/entity"
+	"github.com/amirkhaki/cnbzdtr/config"
 
 	"fmt"
+	"context"
 )
 type inmemoryStore struct {
 	store map[string]*entity.User
 }
 
-func (in *inmemoryStore) AddUser(u *entity.User) error {
+func (in *inmemoryStore) AddUser(_ context.Context, u *entity.User) error {
 	if u.ID == "" {
 		return fmt.Errorf("User ID is empty!")
 	}
@@ -20,7 +22,7 @@ func (in *inmemoryStore) AddUser(u *entity.User) error {
 	return nil
 }
 
-func (in *inmemoryStore) GetUserByID(id string) (*entity.User, error) {
+func (in *inmemoryStore) GetUserByID(_ context.Context, id string) (*entity.User, error) {
 	u, ok := in.store[id]
 	if !ok {
 		return nil, fmt.Errorf("User not found!")
@@ -29,7 +31,7 @@ func (in *inmemoryStore) GetUserByID(id string) (*entity.User, error) {
 }
 
 
-func (in *inmemoryStore) GetUserOrCreate(id string) (*entity.User, error) {
+func (in *inmemoryStore) GetUserOrCreate(_ context.Context, id string) (*entity.User, error) {
 	if u, err := in.GetUserByID(id); err == nil {
 		return u, nil
 	}
@@ -44,7 +46,7 @@ func (in *inmemoryStore) GetUserOrCreate(id string) (*entity.User, error) {
 	return u, nil
 }
 
-func (in *inmemoryStore) UpdateUser(u *entity.User) error {
+func (in *inmemoryStore) UpdateUser(_ context.Context, u *entity.User) error {
 	if u.ID == "" {
 		return fmt.Errorf("User ID is empty!")
 	}
@@ -56,7 +58,7 @@ func (in *inmemoryStore) UpdateUser(u *entity.User) error {
 }
 
 
-func (in *inmemoryStore) DeleteUser(u *entity.User) error {
+func (in *inmemoryStore) DeleteUser(_ context.Context, u *entity.User) error {
 	if u.ID == "" {
 		return fmt.Errorf("User ID is empty!")
 	}
@@ -67,8 +69,8 @@ func (in *inmemoryStore) DeleteUser(u *entity.User) error {
 	return nil
 }
 
-func New() protocol.Store {
+func New(_ config.Config) (protocol.Store, error) {
 	imS := inmemoryStore{}
 	imS.store = make(map[string]*entity.User)
-	return &imS
+	return &imS, nil
 }
