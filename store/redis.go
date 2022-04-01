@@ -22,6 +22,7 @@ func (rS *redisStore) AddUser(ctx context.Context, u *entity.User) error {
 		rdb.HSet(ctx, u.ID, "score", u.Score)
 		rdb.HSet(ctx, u.ID, "most_score", u.MostScore)
 		rdb.HSet(ctx, u.ID, "prev_most_score", u.PrevMostScore)
+		rdb.HSet(ctx, u.ID, "referral_count", u.ReferralCount)
 		return nil
 	}); err != nil {
 		return fmt.Errorf("could not set user data pipelined: %w", err)

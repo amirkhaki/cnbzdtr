@@ -19,6 +19,7 @@ func (h *Handler) InviteCreate(ctx context.Context, s *dg.Session, i *dg.InviteC
 		log.Println(err)
 		return
 	}
+	user.AddReferral(i.TargetUser.ID)
 	err = h.store.UpdateUser(ctx, user)
 	if err != nil {
 		log.Println(err)
