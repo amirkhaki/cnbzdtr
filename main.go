@@ -11,13 +11,33 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"fmt"
+	"strings"
+	"strconv"
 
 	"github.com/bwmarrin/discordgo"
 )
 
 var h *handler.Handler
 var ctx = context.Background()
-
+func readLevels(lvls *entity.Levels) {
+	i := 1
+	for {
+		lvl := os.Getenv(fmt.Sprintf("CD_LEVEL_%d", i))
+		if lvl == "" {
+			break
+		}
+		lvl_parts := strings.Split(lvl, "|")
+		if len(lvl_parts) < 3 {
+			break
+		}
+		from, err := strconv.Atoi(lvl_parts[0])
+		if err != nil {
+			log.Fatal(err)
+		}
+		lvls.AddLevel(entity.Level{From:uint64(from), Title:lvl_parts[1], Url: lvl_parts[2]})
+	}
+}
 func init() {
 	cfg, err := config.New()
 	if err != nil {
@@ -28,10 +48,7 @@ func init() {
 		log.Fatal(err)
 	}
 	lvls := entity.NewLevels()
-	lvls.AddLevel(entity.Level{From: 0, Title: "Zero Level"})
-	lvls.AddLevel(entity.Level{From: 300, Title: "First Level"})
-	lvls.AddLevel(entity.Level{From: 600, Title: "Second Level"})
-	lvls.AddLevel(entity.Level{From: 2600, Title: "Third Level"})
+	readLevels(lvls)
 	h = handler.New(lvls, imS)
 }
 func inviteCreate(s *discordgo.Session, i *discordgo.InviteCreate) {
