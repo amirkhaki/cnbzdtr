@@ -9,14 +9,22 @@ import (
 
 func (h *Handler) MessageCreate(ctx context.Context, s *dg.Session, m *dg.MessageCreate) {
 
-	// Ignore all messages created by the bot itself
-	// This isn't required in this specific example but it's a good practice.
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
 	user, err := h.store.GetUserOrCreate(ctx, m.Author.ID)
 	if err != nil {
 		log.Println(err)
+		return
+	}
+	if m.Content == "!stats" {
+		message := fmt.Sprintf("Level: %s\nScore: %d\nReferral Count: %d", 
+				h.lvls.Level(user.Score).Title, user.Score,
+				user.ReferralCount)
+		_, err = s.ChannelMessageSend(m.ChannelID, message)
+		if err != nil {
+			log.Println(err)
+		}
 		return
 	}
 	seh := &SEH{s: s, lvls: h.lvls}
