@@ -3,13 +3,14 @@
 package store
 
 import (
-	"github.com/amirkhaki/cnbzdtr/protocol"
-	"github.com/amirkhaki/cnbzdtr/entity"
 	"github.com/amirkhaki/cnbzdtr/config"
+	"github.com/amirkhaki/cnbzdtr/entity"
+	"github.com/amirkhaki/cnbzdtr/protocol"
 
-	"fmt"
 	"context"
+	"fmt"
 )
+
 type inmemoryStore struct {
 	store map[string]*entity.User
 }
@@ -29,7 +30,6 @@ func (in *inmemoryStore) GetUserByID(_ context.Context, id string) (*entity.User
 	}
 	return u, nil
 }
-
 
 func (in *inmemoryStore) GetUserOrCreate(_ context.Context, id string) (*entity.User, error) {
 	if u, err := in.GetUserByID(id); err == nil {
@@ -56,7 +56,6 @@ func (in *inmemoryStore) UpdateUser(_ context.Context, u *entity.User) error {
 	in.store[u.ID] = u
 	return nil
 }
-
 
 func (in *inmemoryStore) DeleteUser(_ context.Context, u *entity.User) error {
 	if u.ID == "" {

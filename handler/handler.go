@@ -6,11 +6,11 @@ import (
 )
 
 type Handler struct {
-	lvls *entity.Levels
+	lvls  *entity.Levels
 	store protocol.Store
 }
 
 func New(lvls *entity.Levels, s protocol.Store) *Handler {
-	h := &Handler{lvls:lvls, store: s}
+	h := &Handler{lvls: lvls, store: s}
 	return h
 }

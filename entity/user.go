@@ -1,8 +1,8 @@
 package entity
 
 import (
-	"strings"
 	"fmt"
+	"strings"
 )
 
 type Handler interface {
@@ -19,14 +19,13 @@ func (eL errorList) Error() string {
 	return sb.String()
 }
 
-
 type User struct {
-	ID                   string `redis:"-"`
-	Score                uint64 `redis:"score"`
-	MostScore            uint64 `redis:"most_score"`
-	PrevMostScore        uint64 `redis:"prev_most_score"`
+	ID                      string `redis:"-"`
+	Score                   uint64 `redis:"score"`
+	MostScore               uint64 `redis:"most_score"`
+	PrevMostScore           uint64 `redis:"prev_most_score"`
 	mostScoreChangeHandlers map[string]Handler
-	ReferralCount uint64 `redis:"referral_count"`
+	ReferralCount           uint64 `redis:"referral_count"`
 }
 
 func (u *User) OnMostScoreChange(title string, h Handler) {
@@ -72,7 +71,7 @@ func (u *User) AddReferral(referredID string) {
 }
 
 func NewUser(id string) (*User, error) {
-	u := User{ID:id}
+	u := User{ID: id}
 	u.mostScoreChangeHandlers = make(map[string]Handler)
 	return &u, nil
 }

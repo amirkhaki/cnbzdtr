@@ -1,8 +1,8 @@
 package protocol
 
 import (
-	"github.com/amirkhaki/cnbzdtr/entity"
 	"context"
+	"github.com/amirkhaki/cnbzdtr/entity"
 )
 
 type Store interface {

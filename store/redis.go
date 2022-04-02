@@ -1,16 +1,17 @@
 //go:build !debug
+
 package store
 
 import (
-	"github.com/amirkhaki/cnbzdtr/protocol"
+	"context"
+	"fmt"
 	"github.com/amirkhaki/cnbzdtr/config"
 	"github.com/amirkhaki/cnbzdtr/entity"
+	"github.com/amirkhaki/cnbzdtr/protocol"
 	"github.com/go-redis/redis/v8"
-	"fmt"
-	"context"
 )
 
-type redisStore struct{
+type redisStore struct {
 	rdb *redis.Client
 }
 
@@ -67,6 +68,6 @@ func New(cfg config.Config) (protocol.Store, error) {
 		return nil, fmt.Errorf("Could not parse redis dsn: %w", err)
 	}
 	rdb := redis.NewClient(opt)
-	rS := &redisStore{rdb:rdb}
+	rS := &redisStore{rdb: rdb}
 	return rS, nil
 }

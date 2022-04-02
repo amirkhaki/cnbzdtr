@@ -1,9 +1,9 @@
 package handler
 
 import (
+	"context"
 	dg "github.com/bwmarrin/discordgo"
 	"log"
-	"context"
 )
 
 func (h *Handler) InviteCreate(ctx context.Context, s *dg.Session, i *dg.InviteCreate) {
@@ -12,7 +12,7 @@ func (h *Handler) InviteCreate(ctx context.Context, s *dg.Session, i *dg.InviteC
 		log.Println(err)
 		return
 	}
-	seh := &SEH{s:s, lvls:h.lvls}
+	seh := &SEH{s: s, lvls: h.lvls}
 	user.OnMostScoreChange("SEH", seh)
 	err = user.IncreaseScore(2000)
 	if err != nil {

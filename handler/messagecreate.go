@@ -1,10 +1,10 @@
 package handler
 
 import (
+	"context"
+	"fmt"
 	dg "github.com/bwmarrin/discordgo"
 	"log"
-	"fmt"
-	"context"
 )
 
 func (h *Handler) MessageCreate(ctx context.Context, s *dg.Session, m *dg.MessageCreate) {
@@ -19,7 +19,7 @@ func (h *Handler) MessageCreate(ctx context.Context, s *dg.Session, m *dg.Messag
 		log.Println(err)
 		return
 	}
-	seh := &SEH{s:s, lvls:h.lvls}
+	seh := &SEH{s: s, lvls: h.lvls}
 	user.OnMostScoreChange("SEH", seh)
 	err = user.IncreaseScore(200)
 	if err != nil {
@@ -36,4 +36,3 @@ func (h *Handler) MessageCreate(ctx context.Context, s *dg.Session, m *dg.Messag
 		log.Println(err)
 	}
 }
-
