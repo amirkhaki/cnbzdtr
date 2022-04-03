@@ -49,7 +49,7 @@ func init() {
 	}
 	lvls := entity.NewLevels()
 	readLevels(lvls)
-	h = handler.New(lvls, imS)
+	h = handler.New(lvls, imS, cfg)
 }
 func inviteCreate(s *discordgo.Session, i *discordgo.InviteCreate) {
 	h.InviteCreate(ctx, s, i)
