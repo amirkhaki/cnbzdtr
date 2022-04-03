@@ -22,6 +22,11 @@ func parseEnv(cfg *Config) error {
 func New() (Config, error) {
 	cfg := Config{}
 	err := parseEnv(&cfg)
+	if err == nil {
+		if len(cfg.Cipher_key) % 16 != 0 {
+			err = fmt.Errorf("cipher key length should be 16 or 32")
+		}
+	}
 	return cfg, err
 
 }
