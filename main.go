@@ -36,6 +36,7 @@ func readLevels(lvls *entity.Levels) {
 			log.Fatal(err)
 		}
 		lvls.AddLevel(entity.Level{From:uint64(from), Title:lvl_parts[1], Url: lvl_parts[2]})
+		i += 1
 	}
 }
 func init() {
