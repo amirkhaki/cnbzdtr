@@ -14,6 +14,7 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
+	"net/http"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -79,8 +80,15 @@ func main() {
 	log.Println("Bot is now running. Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
-	<-sc
-
+	herr := make(chan error, 1)
+	go func() {
+		http.HandleFunc("/alive",alive)
+		herr <- http.ListenAndServe(cfg.Port, nil)
+	}()
+	select {
+	case <-sc:
+	case <-herr:
+	}
 	// Cleanly close down the Discord session.
 	dg.Close()
 }

@@ -10,6 +10,7 @@ type Config struct {
 	Token      string `env:"CD_DISCORD_TOKEN"`
 	Redis_DSN  string `env:"CD_REDIS_DSN"`
 	Cipher_key string `env:"CD_CIPHER_KEY"`
+	Port       string `env:"CD_HTTP_PORT"`
 }
 
 func parseEnv(cfg *Config) error {
