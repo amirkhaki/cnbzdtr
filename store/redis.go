@@ -20,10 +20,17 @@ func (rS *redisStore) AddUser(ctx context.Context, u *entity.User) error {
 		return fmt.Errorf("User ID is empty!")
 	}
 	if _, err := rS.rdb.Pipelined(ctx, func(rdb redis.Pipeliner) error {
-		rdb.HSet(ctx, u.ID, "score", u.Score)
-		rdb.HSet(ctx, u.ID, "most_score", u.MostScore)
-		rdb.HSet(ctx, u.ID, "prev_most_score", u.PrevMostScore)
-		rdb.HSet(ctx, u.ID, "referral_count", u.ReferralCount)
+		data := make(map[string]any)
+		data["score"] = u.Score
+		data["most_score"] = u.MostScore
+		data["prev_most_score"] = u.PrevMostScore
+		data["referral_count"] = u.ReferralCount
+		data["message_count"] = u.MessageCount
+		for k, v := range data {
+			if err := rdb.HSet(ctx, u.ID, k, v).Err(); err != nil {
+				return fmt.Errorf("Could not set key %s: %w", k, err)
+			}
+		}
 		return nil
 	}); err != nil {
 		return fmt.Errorf("could not set user data pipelined: %w", err)

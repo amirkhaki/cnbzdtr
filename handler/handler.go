@@ -1,15 +1,15 @@
 package handler
 
 import (
+	"github.com/amirkhaki/cnbzdtr/config"
 	"github.com/amirkhaki/cnbzdtr/entity"
 	"github.com/amirkhaki/cnbzdtr/protocol"
-	"github.com/amirkhaki/cnbzdtr/config"
 )
 
 type Handler struct {
 	lvls  *entity.Levels
 	store protocol.Store
-	cfg config.Config
+	cfg   config.Config
 }
 
 func New(lvls *entity.Levels, s protocol.Store, cfg config.Config) *Handler {

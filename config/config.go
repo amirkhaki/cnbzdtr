@@ -7,8 +7,8 @@ import (
 )
 
 type Config struct {
-	Token     string `env:"CD_DISCORD_TOKEN"`
-	Redis_DSN string `env:"CD_REDIS_DSN"`
+	Token      string `env:"CD_DISCORD_TOKEN"`
+	Redis_DSN  string `env:"CD_REDIS_DSN"`
 	Cipher_key string `env:"CD_CIPHER_KEY"`
 }
 
@@ -23,7 +23,7 @@ func New() (Config, error) {
 	cfg := Config{}
 	err := parseEnv(&cfg)
 	if err == nil {
-		if len(cfg.Cipher_key) % 16 != 0 {
+		if len(cfg.Cipher_key)%16 != 0 {
 			err = fmt.Errorf("cipher key length should be 16 or 32")
 		}
 	}

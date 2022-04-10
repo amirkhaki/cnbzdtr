@@ -18,9 +18,10 @@ func (h *Handler) MessageCreate(ctx context.Context, s *dg.Session, m *dg.Messag
 		return
 	}
 	if m.Content == "!stats" {
-		message := fmt.Sprintf("Level: %s\nScore: %d\nReferral Count: %d", 
-				h.lvls.Level(user.Score).Title, user.Score,
-				user.ReferralCount)
+		message := fmt.Sprintf("Level: %s\nScore: %d\nReferral Count: %d\nMessage Count: %d",
+			h.lvls.Level(user.Score).Title, user.Score,
+			user.ReferralCount,
+			user.MessageCount)
 		_, err = s.ChannelMessageSend(m.ChannelID, message)
 		if err != nil {
 			log.Println(err)
@@ -29,6 +30,7 @@ func (h *Handler) MessageCreate(ctx context.Context, s *dg.Session, m *dg.Messag
 	}
 	seh := &SEH{s: s, lvls: h.lvls, cfg: h.cfg}
 	user.OnMostScoreChange("SEH", seh)
+	user.AddMessage(m.ID)
 	err = user.IncreaseScore(200)
 	if err != nil {
 		log.Println(err)

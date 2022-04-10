@@ -7,7 +7,7 @@ import (
 type Level struct {
 	Title string
 	From  uint64
-	Url string
+	Url   string
 }
 
 type Levels struct {

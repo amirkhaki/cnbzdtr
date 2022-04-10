@@ -1,22 +1,22 @@
 package handler
 
 import (
-	"fmt"
 	"crypto/aes"
 	"crypto/cipher"
-	"io"
 	"crypto/rand"
 	"encoding/base64"
-	"github.com/amirkhaki/cnbzdtr/entity"
+	"fmt"
 	"github.com/amirkhaki/cnbzdtr/config"
+	"github.com/amirkhaki/cnbzdtr/entity"
 	dg "github.com/bwmarrin/discordgo"
+	"io"
 )
 
 // score change event handler
 type SEH struct {
 	s    *dg.Session
 	lvls *entity.Levels
-	cfg config.Config
+	cfg  config.Config
 }
 
 func (sh *SEH) Handle(u *entity.User) error {
@@ -40,7 +40,6 @@ func (sh *SEH) Handle(u *entity.User) error {
 	}
 	return nil
 }
-
 
 func encrypt(key []byte, message string) (encmess string, err error) {
 	plainText := []byte(message)

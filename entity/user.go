@@ -26,6 +26,7 @@ type User struct {
 	PrevMostScore           uint64 `redis:"prev_most_score"`
 	mostScoreChangeHandlers map[string]Handler
 	ReferralCount           uint64 `redis:"referral_count"`
+	MessageCount            uint64 `redis:"message_count"`
 }
 
 func (u *User) OnMostScoreChange(title string, h Handler) {
@@ -68,6 +69,10 @@ func (u *User) DecreaseScore(s uint64) {
 
 func (u *User) AddReferral(referredID string) {
 	u.ReferralCount += 1
+}
+
+func (u *User) AddMessage(messageID string) {
+	u.MessageCount += 1
 }
 
 func NewUser(id string) (*User, error) {
