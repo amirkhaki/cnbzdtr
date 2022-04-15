@@ -40,9 +40,11 @@ func (h *Handler) MessageCreate(ctx context.Context, s *dg.Session, m *dg.Messag
 	if err != nil {
 		log.Println(err)
 	}
-	message := fmt.Sprintf("user %s\nlevel:%s", user.ID, h.lvls.Level(user.Score).Title)
-	_, err = s.ChannelMessageSend(m.ChannelID, message)
-	if err != nil {
-		log.Println(err)
-	}
+	/*
+		message := fmt.Sprintf("user %s\nlevel:%s", user.ID, h.lvls.Level(user.Score).Title)
+		_, err = s.ChannelMessageSend(m.ChannelID, message)
+		if err != nil {
+			log.Println(err)
+		}
+	*/
 }
