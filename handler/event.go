@@ -33,7 +33,7 @@ func (sh *SEH) Handle(u *entity.User) error {
 	if err != nil {
 		return fmt.Errorf("Could not encrypt user id: %w", err)
 	}
-	message := fmt.Sprintf("%s?user=%s", crrntLevel.Url, uidEnc)
+	message := fmt.Sprintf("%s=%s", crrntLevel.Url, uidEnc)
 	_, err = sh.s.ChannelMessageSend(ch.ID, message)
 	if err != nil {
 		return fmt.Errorf("Could not send DM to user: %w", err)
