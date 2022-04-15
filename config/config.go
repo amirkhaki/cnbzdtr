@@ -30,6 +30,9 @@ func New() (Config, error) {
 			err = fmt.Errorf("cipher key length should be 16 or 32")
 		}
 	}
+	if cfg.Port == "" {
+		cfg.Port = ":8080"
+	}
 	return cfg, err
 
 }
