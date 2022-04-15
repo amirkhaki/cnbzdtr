@@ -9,12 +9,12 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"strconv"
 	"strings"
 	"syscall"
-	"net/http"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -82,7 +82,7 @@ func main() {
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	herr := make(chan error, 1)
 	go func() {
-		http.HandleFunc("/alive",alive)
+		http.HandleFunc("/alive", alive)
 		herr <- http.ListenAndServe(cfg.Port, nil)
 	}()
 	select {

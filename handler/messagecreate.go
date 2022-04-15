@@ -31,7 +31,7 @@ func (h *Handler) MessageCreate(ctx context.Context, s *dg.Session, m *dg.Messag
 	seh := &SEH{s: s, lvls: h.lvls, cfg: h.cfg}
 	user.OnMostScoreChange("SEH", seh)
 	user.AddMessage(m.ID)
-	err = user.IncreaseScore(200)
+	err = user.IncreaseScore(h.cfg.MessageScore)
 	if err != nil {
 		log.Println(err)
 		return

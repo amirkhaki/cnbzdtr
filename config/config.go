@@ -7,10 +7,12 @@ import (
 )
 
 type Config struct {
-	Token      string `env:"CD_DISCORD_TOKEN"`
-	Redis_DSN  string `env:"CD_REDIS_DSN"`
-	Cipher_key string `env:"CD_CIPHER_KEY"`
-	Port       string `env:"CD_HTTP_PORT"`
+	Token        string `env:"CD_DISCORD_TOKEN"`
+	Redis_DSN    string `env:"CD_REDIS_DSN"`
+	Cipher_key   string `env:"CD_CIPHER_KEY"`
+	Port         string `env:"CD_HTTP_PORT"`
+	MessageScore uint64 `env:"CD_MESSAGE_SCORE"`
+	InviteScore  uint64 `env:"CD_INVITE_SCORE"`
 }
 
 func parseEnv(cfg *Config) error {

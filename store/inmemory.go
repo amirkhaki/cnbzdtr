@@ -32,14 +32,14 @@ func (in *inmemoryStore) GetUserByID(_ context.Context, id string) (*entity.User
 }
 
 func (in *inmemoryStore) GetUserOrCreate(ctx context.Context, id string) (*entity.User, error) {
-	if u, err := in.GetUserByID(ctx,id); err == nil {
+	if u, err := in.GetUserByID(ctx, id); err == nil {
 		return u, nil
 	}
 	u, err := entity.NewUser(id)
 	if err != nil {
 		return nil, fmt.Errorf("Could not create user: %w", err)
 	}
-	err = in.AddUser(ctx,u)
+	err = in.AddUser(ctx, u)
 	if err != nil {
 		return nil, fmt.Errorf("Could not add user: %w", err)
 	}
