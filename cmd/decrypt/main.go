@@ -5,20 +5,24 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"fmt"
-	"os"
 )
 
 func main() {
-	help := `usage:
-	./decrypt KEY ENCRYPTED
-		KEY is encryption key
-		ENCRYPTED is string to decrypt
-	`
-	if len(os.Args) < 3 {
-		fmt.Println(help)
+	fmt.Println("Please enter encryption key:")
+	var key string
+	_, err := fmt.Scanln(&key)
+	if err != nil {
+		fmt.Println(err)
 		return
 	}
-	msg, err := decrypt([]byte(os.Args[1]), os.Args[2])
+	fmt.Println("Please enter encrypted text:")
+	var encText string
+	_, err = fmt.Scanln(&encText)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	msg, err := decrypt([]byte(key), encText)
 	if err != nil {
 		fmt.Println("error decrypting ",err)
 		return
