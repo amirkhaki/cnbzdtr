@@ -70,6 +70,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	// disable storing  server state in memory
+	dg.StateEnabled = false
 	dg.AddHandler(messageCreate)
 	dg.AddHandler(inviteCreate)
 	dg.Identify.Intents = discordgo.IntentsGuildMessages | discordgo.IntentGuildInvites
