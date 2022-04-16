@@ -13,6 +13,7 @@ type Config struct {
 	Port         string `env:"CD_HTTP_PORT"`
 	MessageScore uint64 `env:"CD_MESSAGE_SCORE"`
 	InviteScore  uint64 `env:"CD_INVITE_SCORE"`
+	StatsChannel string `env:"CD_STATS_CHANNEL_ID"`
 }
 
 func parseEnv(cfg *Config) error {

@@ -17,7 +17,7 @@ func (h *Handler) MessageCreate(ctx context.Context, s *dg.Session, m *dg.Messag
 		log.Println(err)
 		return
 	}
-	if m.Content == "!stats" {
+	if m.Content == "!stats" && (h.cfg.StatsChannel == "" || h.cfg.StatsChannel == m.ChannelID) {
 		message := fmt.Sprintf("Level: %s\nScore: %d\nReferral Count: %d\nMessage Count: %d",
 			h.lvls.Level(user.Score).Title, user.Score,
 			user.ReferralCount,
